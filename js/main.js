@@ -274,4 +274,24 @@ $(document).ready(function () {
       }
     }
   });
+
+  // Modo oscuro/claro (toggle)
+  $("#theme-toggle").on("change", function () {
+    if (this.checked) {
+      $("body").addClass("light-mode");
+    } else {
+      $("body").removeClass("light-mode");
+    }
+
+    // Guardar preferencia en localStorage
+    const isLightMode = $("body").hasClass("light-mode");
+    localStorage.setItem("lightMode", isLightMode);
+  });
+
+  // Verificar preferencia de tema guardada
+  const savedLightMode = localStorage.getItem("lightMode") === "true";
+  if (savedLightMode) {
+    $("body").addClass("light-mode");
+    $("#theme-toggle").prop("checked", true);
+  }
 });
