@@ -94,38 +94,45 @@ $(document).ready(function () {
     }
   );
 
-  // Validación del formulario de contacto
-  $("#contact-form").on("submit", function (e) {
-    e.preventDefault();
+// Validación del formulario de contacto
+$("#contact-form").on("submit", function (e) {
+  e.preventDefault();
 
-    const name = $("#name").val();
-    const email = $("#email").val();
-    const subject = $("#subject").val();
-    const message = $("#message").val();
+  const name = $("#name").val();
+  const email = $("#email").val();
+  const subject = $("#subject").val();
+  const message = $("#message").val();
+  const contactMethod = $("input[name='contactMethod']:checked").val();
 
-    if (name === "" || email === "" || subject === "" || message === "") {
-      alert("Por favor, completa todos los campos del formulario.");
-      return false;
-    }
+  if (name === "" || email === "" || subject === "" || message === "") {
+    alert("Por favor, completa todos los campos del formulario.");
+    return false;
+  }
 
-    // Número de WhatsApp al que deseas enviar el mensaje (coloca el tuyo con código de país, sin espacios)
-    const phoneNumber = "529542052144"; // ejemplo: México +52 y número
+  // Crear el mensaje
+  const userMessage = `Hola, soy ${name}.\nMi correo es: ${email}.\nAsunto: ${subject}.\nMensaje: ${message}`;
+  
+  // Codificar el mensaje para URL
+  const encodedMessage = encodeURIComponent(userMessage);
+  
+  let contactURL;
+  
+  if (contactMethod === "whatsapp") {
+    // Configuración para WhatsApp
+    const phoneNumber = "529542052144";
+    contactURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+  } else {
+    // Configuración para Telegram
+    const telegramUsername = "DrTuxX"; // Reemplaza con tu usuario
+    contactURL = `https://t.me/${telegramUsername}?text=${encodedMessage}`;
+  }
 
-    // Crear el mensaje
-    const whatsappMessage = `Hola, soy ${name}.\nMi correo es: ${email}.\nAsunto: ${subject}.\nMensaje: ${message}`;
+  // Abrir la aplicación elegida en una nueva pestaña
+  window.open(contactURL, "_blank");
 
-    // Codificar el mensaje para URL
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-
-    // Crear el enlace
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-    // Abrir WhatsApp en una nueva pestaña
-    window.open(whatsappURL, "_blank");
-
-    // Opcional: limpiar el formulario
-    this.reset();
-  });
+  // Limpiar el formulario
+  this.reset();
+});
 
   // Añadir clases a elementos para animaciones
   function setupAnimations() {
